@@ -1,41 +1,95 @@
-import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Divider,
+  Drawer,
+  Icon,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import InboxIcon from '@mui/icons-material/Inbox';
-import { useDrawerContext } from '../../contexts';
+import InboxIcon from "@mui/icons-material/Inbox";
+import { useDrawerContext } from "../../contexts";
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 
 interface IMenuLateralProps {
   children: React.ReactNode;
 }
 
+interface IListItemLinkProps {
+  label: string;
+  icon: string;
+  to: string;
+  onClick: (() => void) | undefined;
+}
+
+const ListItemLink: React.FC<IListItemLinkProps> = ({label, icon, to, onClick}) => {
+  const navigate = useNavigate();
+
+  const resolvedPath = useResolvedPath(to);
+  const match = useMatch({path: resolvedPath.pathname, end: false});
+
+  const handleClick = () =>{
+    navigate(to);
+    onClick?.();
+  };
+
+  return (
+    <ListItemButton selected={!!match} onClick={handleClick}>
+      <ListItemIcon>
+        <Icon>{icon}</Icon>
+      </ListItemIcon>
+      <ListItemText primary={label} />
+    </ListItemButton>
+  );
+};
+
 export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
   const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down('sm'));
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { isDrawerOpen, toggleDrawerOpen} = useDrawerContext();
+  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext();
 
   return (
     <>
-      <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : 'permanent'} onClose={toggleDrawerOpen}>
-        <Box width={theme.spacing(28)} height="100%" display="flex" flexDirection="column">
-          <Box width="100%" height={theme.spacing(20)} display="flex" alignItems="center" justifyContent="center">
-            <Avatar sx={{height: theme.spacing(12), width: theme.spacing(12)}} src="https://i.pinimg.com/280x280_RS/9b/f2/01/9bf201d657ef74c531057d29fbee5328.jpg" />
+      <Drawer
+        open={isDrawerOpen}
+        variant={smDown ? "temporary" : "permanent"}
+        onClose={toggleDrawerOpen}
+      >
+        <Box
+          width={theme.spacing(28)}
+          height="100%"
+          display="flex"
+          flexDirection="column"
+        >
+          <Box
+            width="100%"
+            height={theme.spacing(20)}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Avatar
+              sx={{ height: theme.spacing(12), width: theme.spacing(12) }}
+              src="https://i.pinimg.com/280x280_RS/9b/f2/01/9bf201d657ef74c531057d29fbee5328.jpg"
+            />
           </Box>
-          <Divider/>
+          <Divider />
           <Box flex={1}>
-          <List component="nav">
-          <ListItemButton>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Inbox" />
-          </ListItemButton>
-          <ListItemButton>
-          <ListItemIcon>
-            <Icon>home</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-          </ListItemButton>
-          </List>
+            <List component="nav">              
+              {drawerOptions.map(drawerOption =>(
+                <ListItemLink
+                key={drawerOption.path} 
+                icon={drawerOption.icon}
+                label={drawerOption.label}
+                to={drawerOption.path}
+                onClick={smDown ? toggleDrawerOpen : undefined}/>
+              ))}
+            </List>
           </Box>
         </Box>
       </Drawer>
