@@ -1,4 +1,4 @@
-import { FerramentasDaListagem } from "../../shared/components";
+import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
 
 
@@ -6,7 +6,7 @@ export const Dashboard: React.FC = () => {
 
     return(
         <LayoutBasePages titulo='Teste Oi' barraDeFerramentas={(
-            <FerramentasDaListagem mostrarInputBusca textoBotaoNovo="Nova"/>
+            <FerramentasDeDetalhe mostrarBotaoSalvarEVoltar />
         )}>
             Testando
         </LayoutBasePages>
