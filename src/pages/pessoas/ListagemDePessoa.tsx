@@ -5,11 +5,15 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  TableFooter,
   Paper,
+  LinearProgress,
+  Pagination,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { FerramentasDaListagem } from "../../shared/components";
+import { Environment } from "../../shared/environment";
 import { useDebounce } from "../../shared/hooks";
 import { LayoutBasePages } from "../../shared/layouts";
 import {
@@ -30,10 +34,14 @@ export const ListagemDePessoa: React.FC = () => {
     return searchParams.get("busca") || "";
   }, [searchParams]);
 
+  const pagina = useMemo(() => {
+    return Number(searchParams.get("pagina") || "1");
+  }, [searchParams]);
+
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      PessoasService.getAll(1, busca).then((result) => {
+      PessoasService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
@@ -45,7 +53,7 @@ export const ListagemDePessoa: React.FC = () => {
         }
       });
     });
-  }, [busca]);
+  }, [busca, pagina]);
 
   return (
     <LayoutBasePages
@@ -56,12 +64,16 @@ export const ListagemDePessoa: React.FC = () => {
           mostrarInputBusca
           textoDaBusca={busca}
           aoMudarTextoDeBusca={(texto) =>
-            setSearchParams({ busca: texto }, { replace: true })
+            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
           }
         />
       }
     >
-      <TableContainer component={Paper} variant={"outlined"} sx={{ m: 1, width: "auto"}}>
+      <TableContainer
+        component={Paper}
+        variant={"outlined"}
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -73,8 +85,8 @@ export const ListagemDePessoa: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pessoa.map(pessoas => (
-                <TableRow key={pessoas.id}>
+            {pessoa.map((pessoas) => (
+              <TableRow key={pessoas.id}>
                 <TableCell>{pessoas.nome}</TableCell>
                 <TableCell>{pessoas.email}</TableCell>
                 <TableCell>{pessoas.empresa}</TableCell>
@@ -83,6 +95,32 @@ export const ListagemDePessoa: React.FC = () => {
               </TableRow>
             ))}
           </TableBody>
+
+          {totalCount === 0 && !isLoading && (
+            <caption>{Environment.LISTAGEM_VAZIA}</caption>
+          )}
+
+          <TableFooter>
+            {totalCount > 0 && totalCount > Environment.LIMITE_DE_LINHAS && (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <Pagination
+                    count={Math.ceil(totalCount / Environment.LIMITE_DE_LINHAS)}
+                    page={pagina}
+                    onChange={(_, newPage) => setSearchParams({busca, pagina: newPage.toString()}, {replace: true})}
+                  />
+                </TableCell>
+              </TableRow>
+            )}
+
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <LinearProgress variant="indeterminate" />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableFooter>
         </Table>
       </TableContainer>
     </LayoutBasePages>
