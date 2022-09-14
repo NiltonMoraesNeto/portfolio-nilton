@@ -9,9 +9,13 @@ import {
   Paper,
   LinearProgress,
   Pagination,
+  Icon,
+  IconButton,
 } from "@mui/material";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FerramentasDaListagem } from "../../shared/components";
 import { Environment } from "../../shared/environment";
 import { useDebounce } from "../../shared/hooks";
@@ -20,11 +24,13 @@ import {
   IListagemPessoa,
   PessoasService,
 } from "../../shared/services/api/pessoas/PessoasService";
+import Swal from 'sweetalert2'
 
 export const ListagemDePessoa: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
   //const { debounce } = useDebounce(3000, true);
+  const navigate = useNavigate();
 
   const [pessoa, setPessoa] = useState<IListagemPessoa[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -55,6 +61,43 @@ export const ListagemDePessoa: React.FC = () => {
     });
   }, [busca, pagina]);
 
+  const handleDelete = (id: number) => {
+    Swal.fire({
+      title: 'Deseja realmente apagar?',
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      denyButtonText: `Não`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        PessoasService.deleteById(id)
+          .then(result => {
+            if(result instanceof Error){
+              Swal.fire(result.message);
+            }
+            else{
+              setPessoa(oldPessoas => {
+                return [
+                  ...oldPessoas.filter(oldPessoa => oldPessoa.id !== id),
+                ];
+              });
+              Swal.fire('Deletado com sucesso!', '', 'success');
+              /*<Stack sx={{ width: '100%' }} spacing={2}>
+              <Alert severity="success">Deletado com sucesso!</Alert>
+              </Stack>*/
+            }
+          });
+        
+      } else if (result.isDenied) {
+        Swal.fire('Nenhuma alteração feita!', '', 'info')
+        //<Alert severity="info">Nenhuma alteração feita!</Alert>
+      }
+    })
+    
+  };
+
   return (
     <LayoutBasePages
       titulo="Listagem de Pessoas"
@@ -63,6 +106,7 @@ export const ListagemDePessoa: React.FC = () => {
           textoBotaoNovo="Nova Pessoa"
           mostrarInputBusca
           textoDaBusca={busca}
+          aoClicarEmNovo={() => navigate("/pessoas/detalhe/nova")}
           aoMudarTextoDeBusca={(texto) =>
             setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
           }
@@ -91,7 +135,10 @@ export const ListagemDePessoa: React.FC = () => {
                 <TableCell>{pessoas.email}</TableCell>
                 <TableCell>{pessoas.empresa}</TableCell>
                 <TableCell>{pessoas.pais}</TableCell>
-                <TableCell>Ações</TableCell>
+                <TableCell>
+                  <IconButton size="small" onClick={() => navigate(`/pessoas/detalhe/${pessoas.id}`)}><Icon>edit_rounded</Icon></IconButton>
+                  <IconButton size="small" onClick={() => handleDelete(pessoas.id)}><Icon>clear_rounded</Icon></IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

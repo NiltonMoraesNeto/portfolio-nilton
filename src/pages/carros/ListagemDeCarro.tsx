@@ -10,9 +10,11 @@ import {
   LinearProgress,
   CircularProgress,
   Pagination,
+  IconButton,
+  Icon,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FerramentasDaListagem } from "../../shared/components";
 import { Environment } from "../../shared/environment";
 import { useDebounce } from "../../shared/hooks";
@@ -21,11 +23,13 @@ import {
   IListagemCarro,
   CarrosService,
 } from "../../shared/services/api/carros/CarrosService";
+import Swal from 'sweetalert2'
 
 export const ListagemDeCarro: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
   //const { debounce } = useDebounce(3000, true);
+  const navigate = useNavigate();
 
   const [carro, setCarro] = useState<IListagemCarro[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -56,6 +60,39 @@ export const ListagemDeCarro: React.FC = () => {
     });
   }, [busca, pagina]);
 
+  const handleDelete = (id: number) => {
+    Swal.fire({
+      title: 'Deseja realmente apagar?',
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      denyButtonText: `Não`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        CarrosService.deleteById(id)
+          .then(result => {
+            if(result instanceof Error){
+              Swal.fire(result.message);
+            }
+            else{
+              setCarro(oldCarros => {
+                return [
+                  ...oldCarros.filter(oldCarro => oldCarro.id !== id),
+                ];
+              });
+              Swal.fire('Deletado com sucesso!', '', 'success');
+            }
+          });
+        
+      } else if (result.isDenied) {
+        Swal.fire('Nenhuma alteração feita!', '', 'info');
+      }
+    })
+    
+  };
+
   return (
     <LayoutBasePages
       titulo="Listagem de Carros"
@@ -63,6 +100,7 @@ export const ListagemDeCarro: React.FC = () => {
         <FerramentasDaListagem
           textoBotaoNovo="Novo Carro"
           mostrarInputBusca
+          aoClicarEmNovo={() => navigate("/carros/detalhe/novo")}
           textoDaBusca={busca}
           aoMudarTextoDeBusca={(texto) =>
             setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
@@ -90,7 +128,10 @@ export const ListagemDeCarro: React.FC = () => {
                 <TableCell>{carros.montadora}</TableCell>
                 <TableCell>{carros.modelo}</TableCell>
                 <TableCell>{carros.ano}</TableCell>
-                <TableCell>Ações</TableCell>
+                <TableCell>
+                  <IconButton size="small" onClick={() => navigate(`/carros/detalhe/${carros.id}`)}><Icon>edit_rounded</Icon></IconButton>
+                  <IconButton size="small" onClick={() => handleDelete(carros.id)}><Icon>clear_rounded</Icon></IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
