@@ -11,32 +11,6 @@
   ],
   "pessoas": [
     {
-      "id": 14,
-      "nome": "Rosita Lawrenz",
-      "profissao": "Senior Financial Analyst",
-      "email": "rlawrenzd@google.com.br",
-      "sexo": "Female",
-      "empresa": "Blogtags",
-      "pais": "Russia",
-      "cidade": "Kastornoye",
-      "telefone": "791-877-5055",
-      "Cep": "306700",
-      "Idioma": "Japanese"
-    },
-    {
-      "id": 16,
-      "nome": "Ashley Andell",
-      "profissao": "Senior Developer",
-      "email": "aandellf@dot.gov",
-      "sexo": "Female",
-      "empresa": "Oba",
-      "pais": "France",
-      "cidade": "Blois",
-      "telefone": "730-625-4365",
-      "Cep": "41004 CEDEX",
-      "Idioma": "Moldovan"
-    },
-    {
       "id": 19,
       "nome": "Kathryne Demelt",
       "profissao": "Nuclear Power Engineer",

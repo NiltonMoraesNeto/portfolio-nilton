@@ -70,7 +70,7 @@ export const ListagemDePessoa: React.FC = () => {
       confirmButtonText: 'Sim',
       denyButtonText: `Não`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
+
       if (result.isConfirmed) {
         PessoasService.deleteById(id)
           .then(result => {
@@ -91,7 +91,7 @@ export const ListagemDePessoa: React.FC = () => {
           });
         
       } else if (result.isDenied) {
-        Swal.fire('Nenhuma alteração feita!', '', 'info')
+        Swal.fire('Nenhuma alteração feita!', '', 'info');
         //<Alert severity="info">Nenhuma alteração feita!</Alert>
       }
     })

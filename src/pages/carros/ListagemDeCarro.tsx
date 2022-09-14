@@ -69,7 +69,6 @@ export const ListagemDeCarro: React.FC = () => {
       confirmButtonText: 'Sim',
       denyButtonText: `Não`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         CarrosService.deleteById(id)
           .then(result => {
