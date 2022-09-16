@@ -12736,32 +12736,6 @@
       "telefone": "626-414-7057",
       "Cep": "751 87",
       "Idioma": "Dhivehi"
-    },
-    {
-      "nome": "Nilton",
-      "profissao": "Programador de Sistemas",
-      "email": "nilton@nilton.com",
-      "sexo": "Masculino",
-      "empresa": "ACL",
-      "pais": "Brasil",
-      "cidade": "Curitiba",
-      "telefone": "9953535",
-      "Cep": "4578653",
-      "Idioma": "Português",
-      "id": 1001
-    },
-    {
-      "nome": "Marina",
-      "profissao": "Médica",
-      "email": "marina@marina.com",
-      "sexo": "Feminino",
-      "empresa": "Prefeitura SJP",
-      "pais": "Brasil",
-      "cidade": "Curitiba",
-      "telefone": "9987421",
-      "Cep": "807654",
-      "Idioma": "Português",
-      "id": 1002
     }
   ],
   "carros": [
