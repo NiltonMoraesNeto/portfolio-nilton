@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Form } from "@unform/web";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 import { FormHandles } from "@unform/core";
 import { VTextField } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
@@ -63,16 +63,17 @@ export const DetalhesDePessoa: React.FC = () => {
         }
       });
     } else {
-      PessoasService.updateById(Number(id), {id: Number(id), ...dados}).then((result) => {
-        setIsLoading(false);
-        if (result instanceof Error) {
-          Swal.fire(result.message);
+      PessoasService.updateById(Number(id), { id: Number(id), ...dados }).then(
+        (result) => {
+          setIsLoading(false);
+          if (result instanceof Error) {
+            Swal.fire(result.message);
+          } else {
+            Swal.fire("Editado com sucesso!");
+            navigate(`/pessoas/`);
+          }
         }
-        else{
-          Swal.fire("Editado com sucesso!");
-          navigate(`/pessoas/`);
-        }
-      });
+      );
     }
   };
 
@@ -118,43 +119,102 @@ export const DetalhesDePessoa: React.FC = () => {
       }
     >
       <Form ref={formRef} onSubmit={handleSave}>
-        <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
-        <Grid container spacing={2} padding={2}>
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-            <VTextField name="nome" variant="standard" label="Nome" fullWidth/>
+        <Box
+          margin={1}
+          display="flex"
+          flexDirection="column"
+          component={Paper}
+          variant="outlined"
+        >
+          <Grid item margin={2}>
+            {id === "nova" && (
+              <Typography variant="h6">Criar Nova Pessoa</Typography>
+            )}
+
+            {id !== "nova" && (
+              <Typography variant="h6">Editar Pessoa</Typography>
+            )}
           </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-            <VTextField name="profissao" variant="standard" label="Profissão" fullWidth/>
+          <Grid container spacing={2} padding={2}>
+            <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+              <VTextField
+                name="nome"
+                variant="standard"
+                label="Nome"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+              <VTextField
+                name="profissao"
+                variant="standard"
+                label="Profissão"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+              <VTextField
+                name="email"
+                variant="standard"
+                label="E-mail"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="sexo"
+                variant="standard"
+                label="Sexo"
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-            <VTextField name="email" variant="standard" label="E-mail" fullWidth/>
+          <br />
+          <Grid container spacing={2} padding={2}>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="empresa"
+                variant="standard"
+                label="Empresa"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="pais"
+                variant="standard"
+                label="Pais"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="cidade"
+                variant="standard"
+                label="Cidade"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="telefone"
+                variant="standard"
+                label="Telefone"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField name="Cep" variant="standard" label="Cep" fullWidth />
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+              <VTextField
+                name="Idioma"
+                variant="standard"
+                label="Idioma"
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="sexo" variant="standard" label="Sexo" fullWidth/>
-          </Grid>
-        </Grid>
-        <br />
-        <Grid container spacing={2} padding={2}>
-        
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="empresa" variant="standard" label="Empresa" fullWidth/>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="pais" variant="standard" label="Pais" fullWidth/>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="cidade" variant="standard" label="Cidade" fullWidth/>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="telefone" variant="standard" label="Telefone" fullWidth/>
-          </Grid>
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="Cep" variant="standard" label="Cep" fullWidth/>
-          </Grid>          
-          <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-            <VTextField name="Idioma" variant="standard" label="Idioma" fullWidth/>
-          </Grid>
-        </Grid>
         </Box>
       </Form>
     </LayoutBasePages>

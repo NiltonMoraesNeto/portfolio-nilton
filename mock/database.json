@@ -25,7 +25,7 @@
     },
     {
       "id": 22,
-      "nome": "Yettie Ragles",
+      "nome": "Yettie Raglest",
       "profissao": "Senior Developer",
       "email": "yraglesl@google.it",
       "sexo": "Female",
@@ -12862,12 +12862,6 @@
       "ano": 2008
     },
     {
-      "id": 18,
-      "montadora": "Toyota",
-      "modelo": "Avalon",
-      "ano": 2007
-    },
-    {
       "id": 19,
       "montadora": "Acura",
       "modelo": "TL",
@@ -12896,12 +12890,6 @@
       "montadora": "Subaru",
       "modelo": "Forester",
       "ano": 2003
-    },
-    {
-      "id": 24,
-      "montadora": "Toyota",
-      "modelo": "Avalon",
-      "ano": 1997
     },
     {
       "id": 25,
@@ -18752,6 +18740,12 @@
       "montadora": "Mazda",
       "modelo": "MPV",
       "ano": 2005
+    },
+    {
+      "id": 1001,
+      "montadora": "Fiat",
+      "modelo": "Uno",
+      "ano": "2009"
     }
   ]
 }
