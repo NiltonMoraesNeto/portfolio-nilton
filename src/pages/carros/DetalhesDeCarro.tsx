@@ -4,7 +4,9 @@ import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
 import Swal from "sweetalert2";
 import { CarrosService } from "../../shared/services/api/carros/CarrosService";
-import { LinearProgress } from "@mui/material";
+import { Form } from "@unform/web";
+import { VTextField } from "../../shared/forms";
+import { Button, Grid } from "@mui/material";
 
 export const DetalhesDeCarro: React.FC = () => {
   const { id = "novo" } = useParams<"id">();
@@ -13,7 +15,7 @@ export const DetalhesDeCarro: React.FC = () => {
   const [modelo, setModelo] = useState("");
 
   useEffect(() => {
-    if (id !== "nova") {
+    if (id !== "novo") {
       setIsLoading(true);
       CarrosService.getById(Number(id)).then((result) => {
         setIsLoading(false);
@@ -78,10 +80,31 @@ export const DetalhesDeCarro: React.FC = () => {
         />
       }
     >
-        {isLoading && (
-            <LinearProgress variant="indeterminate"/>
-        )}
-      <p>DetalhesDeCarro - {id}</p>
+
+<Form onSubmit={(dados) => console.log(dados)}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <VTextField name="montadora" variant="outlined" label="Montadora"/>
+          </Grid>
+          <Grid item xs={4}>
+            <VTextField name="modelo" variant="outlined" label="Modelo"/>
+          </Grid>
+          <Grid item xs={4}>
+            <VTextField name="ano" variant="outlined" label="Ano" type="number"
+            InputProps={{ inputProps: { min: "1900", max: "2025", step: "1" } }}/>
+          </Grid>
+        </Grid>
+        <br />
+        <Grid container spacing={12}>
+          <Grid item xs={5}>
+            <Button variant="outlined" type="submit">
+              Salvar
+            </Button>
+          </Grid>
+        </Grid>
+      </Form>
+
+
     </LayoutBasePages>
   );
 };

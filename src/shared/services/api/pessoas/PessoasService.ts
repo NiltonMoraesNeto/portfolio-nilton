@@ -12,8 +12,8 @@ export interface IListagemPessoa{
     pais: string;
     cidade: string;
     telefone: string;
-    cep: string;
-    idioma: string;
+    Cep: string;
+    Idioma: string;
 }
 
 export interface IDetalhePessoa{
@@ -26,8 +26,8 @@ export interface IDetalhePessoa{
     pais: string;
     cidade: string;
     telefone: string;
-    cep: string;
-    idioma: string;
+    Cep: string;
+    Idioma: string;
 }
 
 type TPessoasComTotalCount = {
