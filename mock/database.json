@@ -38,7 +38,7 @@
     },
     {
       "id": 23,
-      "nome": "Stephani Waple",
+      "nome": "Stephani Waplebb",
       "profissao": "Senior Quality Engineer",
       "email": "swaplem@addthis.com",
       "sexo": "Female",
@@ -51,7 +51,7 @@
     },
     {
       "id": 24,
-      "nome": "Jodi Twinning",
+      "nome": "Jodi TwinningDD",
       "profissao": "Statistician II",
       "email": "jtwinningn@usda.gov",
       "sexo": "Male",
@@ -18720,6 +18720,12 @@
       "montadora": "Fiat",
       "modelo": "Uno",
       "ano": "2009"
+    },
+    {
+      "id": 1002,
+      "montadora": "Smart",
+      "modelo": "Fortwo",
+      "ano": "2015"
     }
   ]
 }

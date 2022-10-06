@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Form } from "@unform/web";
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import { FormHandles } from "@unform/core";
-import { VTextField } from "../../shared/forms";
+import { VTextField, VForm, useVForm } from "../../shared/forms";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBasePages } from "../../shared/layouts";
 import { PessoasService } from "../../shared/services/api/pessoas/PessoasService";
@@ -25,7 +23,7 @@ interface IFormData {
 export const DetalhesDePessoa: React.FC = () => {
   const { id = "nova" } = useParams<"id">();
   const navigate = useNavigate();
-  const formRef = useRef<FormHandles>(null);
+  const {formRef, save, saveAndClose, isSaveAndClose} = useVForm();
 
   const [isLoading, setIsLoading] = useState(false);
   const [nome, setNome] = useState("");
@@ -45,6 +43,20 @@ export const DetalhesDePessoa: React.FC = () => {
         }
       });
     }
+    else{
+      formRef.current?.setData({
+        nome: "",
+        profissao: "",
+        email: "",
+        sexo: "",
+        empresa: "",
+        pais: "",
+        cidade: "",
+        telefone: "",
+        Cep: "",
+        Idioma: "",
+      });
+    }
   }, [id]);
 
   const handleSave = (dados: IFormData) => {
@@ -57,9 +69,13 @@ export const DetalhesDePessoa: React.FC = () => {
         if (result instanceof Error) {
           Swal.fire(result.message);
         } else {
-          Swal.fire("Criado com sucesso!");
-          navigate(`/pessoas/`);
-          //navigate(`/pessoas/detalhe/${result}`);
+          if(isSaveAndClose()){
+            Swal.fire("Criado com sucesso!");
+            navigate(`/pessoas/`);
+
+          }else{
+            navigate(`/pessoas/detalhe/${result}`);
+          }
         }
       });
     } else {
@@ -68,10 +84,21 @@ export const DetalhesDePessoa: React.FC = () => {
           setIsLoading(false);
           if (result instanceof Error) {
             Swal.fire(result.message);
-          } else {
+          } 
+          else{
+            if(isSaveAndClose()){
+              Swal.fire("Editado com sucesso!");
+              navigate(`/pessoas/`);
+  
+            }else{
+              Swal.fire("Editado com sucesso!");
+              navigate(`/pessoas/detalhe/${id}`);
+            }
+          }
+          /*else {
             Swal.fire("Editado com sucesso!");
             navigate(`/pessoas/`);
-          }
+          }*/
         }
       );
     }
@@ -113,12 +140,12 @@ export const DetalhesDePessoa: React.FC = () => {
           aoClicarEmNovo={() => navigate("/pessoas/detalhe/nova")}
           aoClicarEmVoltar={() => navigate("/pessoas")}
           aoClicarEmApagar={() => handleDelete(Number(id))}
-          aoClicarEmSalvar={() => formRef.current?.submitForm()}
-          aoClicarEmSalvarEVoltar={() => formRef.current?.submitForm()}
+          aoClicarEmSalvar={save}
+          aoClicarEmSalvarEVoltar={saveAndClose}
         />
       }
     >
-      <Form ref={formRef} onSubmit={handleSave}>
+      <VForm ref={formRef} onSubmit={handleSave}>
         <Box
           margin={1}
           display="flex"
@@ -216,7 +243,7 @@ export const DetalhesDePessoa: React.FC = () => {
             </Grid>
           </Grid>
         </Box>
-      </Form>
+      </VForm>
     </LayoutBasePages>
   );
 };

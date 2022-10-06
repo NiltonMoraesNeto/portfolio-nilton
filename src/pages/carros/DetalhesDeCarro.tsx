@@ -37,6 +37,13 @@ export const DetalhesDeCarro: React.FC = () => {
         }
       });
     }
+    else{
+      formRef.current?.setData({
+        montadora: "",
+        modelo: "",
+        ano: "",
+      });
+    }
   }, [id]);
 
   const handleSave = (dados: IFormData) => {
