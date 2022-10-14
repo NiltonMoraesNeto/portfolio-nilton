@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "accessToken": "qwertyuiop"
+  },
   "users": [
     {
       "id": 1,
