@@ -15,7 +15,7 @@
   "pessoas": [
     {
       "id": 20,
-      "nome": "Madella Le Leu",
+      "nome": "Madulla Le Leu",
       "profissao": "Information Systems Manager",
       "email": "mlej@alibaba.com",
       "sexo": "Female",
@@ -51,32 +51,6 @@
       "telefone": "518-578-9790",
       "Cep": null,
       "Idioma": "Haitian Creole"
-    },
-    {
-      "id": 24,
-      "nome": "Jodi TwinningDD",
-      "profissao": "Statistician II",
-      "email": "jtwinningn@usda.gov",
-      "sexo": "Male",
-      "empresa": "Kimia",
-      "pais": "Portugal",
-      "cidade": "Vilar do Pinheiro",
-      "telefone": "317-537-1539",
-      "Cep": "4485-824",
-      "Idioma": "Norwegian"
-    },
-    {
-      "id": 25,
-      "nome": "Dori Shavel",
-      "profissao": "Systems Administrator I",
-      "email": "dshavelo@macromedia.com",
-      "sexo": "Female",
-      "empresa": "Mycat",
-      "pais": "Indonesia",
-      "cidade": "Jalupang Dua",
-      "telefone": "360-141-9488",
-      "Cep": null,
-      "Idioma": "Latvian"
     },
     {
       "id": 26,
@@ -12825,12 +12799,6 @@
       "montadora": "Ford",
       "modelo": "Explorer Sport Trac",
       "ano": 2001
-    },
-    {
-      "id": 16,
-      "montadora": "Suzuki",
-      "modelo": "Samurai",
-      "ano": 1992
     },
     {
       "id": 17,

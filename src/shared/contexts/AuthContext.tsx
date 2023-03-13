@@ -16,7 +16,7 @@ interface IAuthContextData {
 
 const AuthContext = createContext({} as IAuthContextData);
 
-const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "App_Access_Token";
+const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
 
 interface IAuthProviderProps {
   children: React.ReactNode;

@@ -9,11 +9,14 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
+  Button,MenuItem,Menu, Typography
 } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Box } from "@mui/system";
 import InboxIcon from "@mui/icons-material/Inbox";
-import { useAppThemeContext, useDrawerContext } from "../../contexts";
+import { useAppThemeContext, useAuthContext, useDrawerContext } from "../../contexts";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import { useState } from "react";
 
 interface IMenuLateralProps {
   children: React.ReactNode;
@@ -52,12 +55,49 @@ const ListItemLink: React.FC<IListItemLinkProps> = ({
   );
 };
 
+const MenuItemLink: React.FC<IListItemLinkProps> = ({
+  label,
+  icon,
+  to,
+  onClick,
+}) => {
+  const navigate = useNavigate();
+
+  const resolvedPath = useResolvedPath(to);
+  const match = useMatch({ path: resolvedPath.pathname, end: false });
+
+  const handleClick = () => {
+    navigate(to);
+    onClick?.();
+  };
+
+  return (
+
+    <ListItemButton selected={!!match} onClick={handleClick}>
+    <ListItemIcon>
+      <Icon>{icon}</Icon>
+    </ListItemIcon>
+    <MenuItem>{label}</MenuItem>
+  </ListItemButton>
+  );
+};
+
 export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext();
   const { toggleTheme } = useAppThemeContext();
+  const { logout } = useAuthContext();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -86,8 +126,8 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
           </Box>
           <Divider />
           <Box flex={1}>
-            <List component="nav">
-              {drawerOptions.map((drawerOption) => (
+            {/* <List component="nav">
+              {drawerOptions.map((drawerOption) => (              
                 <ListItemLink
                   key={drawerOption.path}
                   icon={drawerOption.icon}
@@ -96,7 +136,70 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                   onClick={smDown ? toggleDrawerOpen : undefined}
                 />
               ))}
-            </List>
+            </List> */}
+            <div>
+      <Button
+        id="lock-button"
+        aria-controls={open ? 'lock-menu' : undefined}
+        aria-haspopup="listbox"
+        aria-expanded={open ? 'false' : undefined}
+        onClick={handleClick2}
+        endIcon={<KeyboardArrowDownIcon />}
+      >
+         <Typography variant="body2" color="text.secondary">
+          Cadastros
+          </Typography>
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {drawerOptions.map((drawerOption) => (  
+        <MenuItemLink key={drawerOption.path}
+        icon={drawerOption.icon}
+        label={drawerOption.label}
+        to={drawerOption.path}
+        onClick={smDown ? toggleDrawerOpen : undefined}
+        />
+        ))}
+      </Menu>
+
+      <Button
+        id="lock-button"
+        aria-controls={open ? 'lock-menu' : undefined}
+        aria-haspopup="listbox"
+        aria-expanded={open ? 'false' : undefined}
+        onClick={handleClick2}
+        endIcon={<KeyboardArrowDownIcon />}
+      >
+         <Typography variant="body2" color="text.secondary">
+         Cadastros e Cadastros
+          </Typography>
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {drawerOptions.map((drawerOption) => (  
+        <MenuItemLink key={drawerOption.path}
+        icon={drawerOption.icon}
+        label={drawerOption.label}
+        to={drawerOption.path}
+        onClick={smDown ? toggleDrawerOpen : undefined}
+        />
+        ))}
+      </Menu>
+    </div>
           </Box>
           <Box>
             <List component="nav">
@@ -105,6 +208,12 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                   <Icon>dark_mode</Icon>
                 </ListItemIcon>
                 <ListItemText primary="Alterar Tema" />
+              </ListItemButton>
+              <ListItemButton onClick={logout}>
+                <ListItemIcon>
+                  <Icon>logout</Icon>
+                </ListItemIcon>
+                <ListItemText primary="Sair" />
               </ListItemButton>
             </List>
           </Box>
