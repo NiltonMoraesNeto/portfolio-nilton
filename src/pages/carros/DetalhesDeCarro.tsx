@@ -5,9 +5,11 @@ import { LayoutBasePages } from "../../shared/layouts";
 import Swal from "sweetalert2";
 import { CarrosService } from "../../shared/services/api/carros/CarrosService";
 import { Form } from "@unform/web";
-import { VTextField } from "../../shared/forms";
+import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { FormHandles } from "@unform/core";
+import * as yup from 'yup'; 
+import schemas from "../../shared/services/validations/schemaCarro";
 
 interface IFormData {
   montadora: string;
@@ -48,7 +50,16 @@ export const DetalhesDeCarro: React.FC = () => {
 
   const handleSave = (dados: IFormData) => {
     console.log(dados);
-    setIsLoading(true);
+    //setIsLoading(true);
+
+    const schema = schemas;
+        schema.validate(dados, {
+          abortEarly: false,
+        })
+
+    //schemas.validate(dados, {abortEarly: false})
+    .then((dadosValidados) => {
+      setIsLoading(true);
 
     if (id === "novo") {
       CarrosService.create(dados).then((result) => {
@@ -73,6 +84,18 @@ export const DetalhesDeCarro: React.FC = () => {
         }
       );
     }
+  })
+  .catch((errors: yup.ValidationError) => {
+    const validationErrors: IVFormErrors = {};
+
+    errors.inner.forEach(error => {
+      if(!error.path) return;
+
+      validationErrors[error.path] = error.message;
+    });
+    console.log(validationErrors);
+    formRef.current?.setErrors(validationErrors);
+  });
   };
 
   const handleDelete = (id: number) => {
